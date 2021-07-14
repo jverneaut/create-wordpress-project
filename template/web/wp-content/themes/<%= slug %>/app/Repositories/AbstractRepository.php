@@ -9,7 +9,7 @@
 namespace Studiometa\Repositories;
 
 /** Class */
-abstract class Repository {
+abstract class AbstractRepository {
 	/**
 	 * List of posts.
 	 *
@@ -42,7 +42,7 @@ abstract class Repository {
 	 *
 	 * @param array $params Query params.
 	 *
-	 * @return Repository
+	 * @return AbstractRepository
 	 */
 	protected function query( array $params ) {
 		// Clear old result sets.
@@ -81,7 +81,7 @@ abstract class Repository {
 	/**
 	 * Clears the current result set.
 	 *
-	 * @return Repository
+	 * @return AbstractRepository
 	 */
 	protected function reset() {
 		$this->result_set = array();
@@ -93,7 +93,7 @@ abstract class Repository {
 	 *
 	 * @param array $result_set Result set.
 	 *
-	 * @return Repository
+	 * @return AbstractRepository
 	 */
 	protected function result_set( $result_set = array() ) {
 		$this->result_set = $result_set;
