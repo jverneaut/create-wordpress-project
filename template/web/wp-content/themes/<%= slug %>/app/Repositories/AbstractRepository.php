@@ -1,40 +1,63 @@
 <?php
 /**
- * Parent repository class. Provides a very basic, fluent interface to interact
- * with query
+ * Abstract repository class.
  *
  * @package Studiometa
+ * @subpackage Repositories
  */
 
 namespace Studiometa\Repositories;
 
+use ArrayObject;
+
 /** Class */
 abstract class AbstractRepository {
 	/**
-	 * List of posts.
+	 * List of results.
 	 *
-	 * @var array
+	 * @var array|ArrayObject<int, mixed>
 	 */
-	private $result_set = array();
+	private $results = array();
 
 	/**
-	 * Returns an array of posts.
+	 * Returns the results.
 	 *
-	 * @return array
+	 * @return array|ArrayObject<int, mixed>
 	 */
 	public function get() {
-		return $this->result_set;
+		return $this->results;
+	}
+
+	/**
+	 * Set the results.
+	 *
+	 * @param array|ArrayObject<int, mixed> $results The results to set.
+	 * @return $this
+	 */
+	private function set( $results ) {
+		$this->results = $results;
+		return $this;
 	}
 
 	/**
 	 * Returns the first item in a collection. Returns null if there are 0 items in
 	 * the collection.
 	 *
-	 * @return mixed
+	 * @return mixed|null
 	 */
 	public function first() {
-		$local_array = $this->get();
-		return isset( $local_array[0] ) ? $local_array[0] : null;
+		$array = (array) $this->get();
+		return $array[ array_key_first( $array ) ] ?? null;
+	}
+
+	/**
+	 * Get the last item in a collection, null if the collection is empty.
+	 *
+	 * @return mixed|null
+	 */
+	public function last() {
+		$array = (array) $this->get();
+		return $array[ array_key_last( $array ) ] ?? null;
 	}
 
 	/**
@@ -42,7 +65,7 @@ abstract class AbstractRepository {
 	 *
 	 * @param array $params Query params.
 	 *
-	 * @return AbstractRepository
+	 * @return $this
 	 */
 	protected function query( array $params ) {
 		// Clear old result sets.
@@ -53,7 +76,7 @@ abstract class AbstractRepository {
 
 		if ( false !== $cached_results && count( $cached_results ) > 0 ) {
 			// Use cached results.
-			return $this->result_set( $cached_results );
+			return $this->set( $cached_results );
 		}
 
 		$results = $this->do_query( $params );
@@ -63,7 +86,7 @@ abstract class AbstractRepository {
 			wp_cache_set( $cache_key, $results, __CLASS__ );
 		}
 
-		return $this->result_set( $results );
+		return $this->set( $results );
 	}
 
 	/**
@@ -81,23 +104,10 @@ abstract class AbstractRepository {
 	/**
 	 * Clears the current result set.
 	 *
-	 * @return AbstractRepository
+	 * @return $this
 	 */
 	protected function reset() {
-		$this->result_set = array();
+		$this->set( array() );
 		return $this;
 	}
-
-	/**
-	 * Returns current result set
-	 *
-	 * @param array $result_set Result set.
-	 *
-	 * @return AbstractRepository
-	 */
-	protected function result_set( $result_set = array() ) {
-		$this->result_set = $result_set;
-		return $this;
-	}
-
 }

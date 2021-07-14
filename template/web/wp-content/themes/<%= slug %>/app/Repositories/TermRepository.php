@@ -30,7 +30,7 @@ final class TermRepository extends AbstractRepository {
 	 * @param array        $exclude  IDs of posts to exclude.
 	 * @param int          $limit    Number of maximum results.
 	 *
-	 * @return AbstractRepository
+	 * @return $this
 	 */
 	public function top_level_terms( $taxonomy, $exclude = array(), $limit = 100 ) {
 		// Set sane defaults so we don't do full table scans.

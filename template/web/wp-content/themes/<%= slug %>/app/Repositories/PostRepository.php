@@ -33,7 +33,7 @@ class PostRepository extends AbstractRepository {
 	 * @param array        $exclude Posts to exclude (optional).
 	 * @param integer      $paged   Enable pagination (optional).
 	 *
-	 * @return AbstractRepository
+	 * @return $this
 	 */
 	public function posts_by_category_slug( $slug, $limit = 10, $exclude = array(), $paged = 0 ) {
 
@@ -77,7 +77,7 @@ class PostRepository extends AbstractRepository {
 	 * @param array   $exclude    IDs of posts to exclude.
 	 * @param integer $paged      Enable pagination.
 	 *
-	 * @return AbstractRepository
+	 * @return $this
 	 */
 	public function latest_posts( $limit = 10, array $exclude = array(), $paged = 0 ) {
 
